@@ -1,0 +1,39 @@
+{
+  "name": "nodejs-hometask",
+  "version": "0.0.1",
+  "description": "Hometask for NodeJS and express lecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "sh -c 'env REPO_URL=$0 npx mocha tests/**/*.spec.js -R JSON --exit'",
+    "test-local": "./node_modules/.bin/mocha tests/**/*.spec.js --exit -R JSON",
+    "start": "node index.js",
+    "build-front": "cd client | ls",
+    "feedback": "node ./feedback/index.js",
+    "generate": "npm run test-local | npm run feedback"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DmitrijDN/nodejs-2020-private.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "expressJS"
+  ],
+  "author": "Dmitriy Beseda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DmitrijDN/nodejs-2020-private/issues"
+  },
+  "homepage": "https://github.com/DmitrijDN/nodejs-2020-private#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "lodash.isempty": "^4.4.0",
+    "lowdb": "^1.0.0",
+    "mocha": "^7.1.1",
+    "request": "^2.88.2",
+    "uuid": "^7.0.3"
+  }
+}
