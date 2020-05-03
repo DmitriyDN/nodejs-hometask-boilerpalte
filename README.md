@@ -29,18 +29,18 @@ npm start
 Необходимо реализовать REST для сущностей пользователя и бойца.
 ```
     USER:
-        GET /api/user
-        GET /api/user/:id
-        POST /api/user
-        PUT /api/user/:id
-        DELETE /api/user/:id
+        GET /api/users
+        GET /api/users/:id
+        POST /api/users
+        PUT /api/users/:id
+        DELETE /api/users/:id
 
     FIGHTER
-        GET /api/fighter
-        GET /api/fighter/:id
-        POST /api/fighter
-        PUT /api/fighter/:id
-        DELETE /api/fighter/:id
+        GET /api/fighters
+        GET /api/fighters/:id
+        POST /api/fighters
+        PUT /api/fighters/:id
+        DELETE /api/fighters/:id
 ```
 
 Для запросов на создание и обновление сущностей необходимо реализовать валидацию через middlewares. Правила валидации определяются сущностями, в папке models. Валидировать необходимо:
