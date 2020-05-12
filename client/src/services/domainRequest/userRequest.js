@@ -1,5 +1,5 @@
 import { post } from "../requestHelper";
-const entity = 'user'
+const entity = 'users'
 
 export const createUser = async (body) => {
     return await post(entity, body);

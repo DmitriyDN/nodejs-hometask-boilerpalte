@@ -1,6 +1,6 @@
 import { get, post } from "../requestHelper";
 
-const entity = 'fighter';
+const entity = 'fighters';
 
 export const getFighters = async () => {
     return await get(entity);
