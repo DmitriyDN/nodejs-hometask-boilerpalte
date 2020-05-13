@@ -42,6 +42,7 @@ export default function Fighter({ fightersList, onFighterSelect, selectedFighter
                     ? <div>
                         <div>Name: {selectedFighter.name}</div>
                         <div>Power: {selectedFighter.power}</div>
+                        <div>Defense: {selectedFighter.defense}</div>
                         <div>Health: {selectedFighter.health}</div>
                     </div>
                     : null
