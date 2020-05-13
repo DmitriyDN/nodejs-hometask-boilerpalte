@@ -13,7 +13,8 @@ export default function NewFighter({ onCreated }) {
     }
 
     const onPowerChange = (event) => {
-        setPower(event.target.value);
+        const value = event.target.value || event.target.value === 0 ? Number(event.target.value) : null;
+        setPower(value);
     }
 
     const onSubmit = async () => {
