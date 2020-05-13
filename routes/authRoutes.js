@@ -6,7 +6,6 @@ const router = Router();
 
 router.post('/login', (req, res, next) => {
     try {
-        // TODO: Implement login action
         res.data = data;
     } catch (err) {
         res.err = err;
