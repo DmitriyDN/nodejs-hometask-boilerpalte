@@ -32,7 +32,7 @@ export default function Fighter({ fightersList, onFighterSelect, selectedFighter
                     value={fighter}
                     onChange={handleChange}
                 >
-                    {fightersList.map((it, index) => {
+                    {Array(fightersList).map((it, index) => {
                         return (
                             <MenuItem key={`${index}`} value={it}>{it.name}</MenuItem>
                         );
