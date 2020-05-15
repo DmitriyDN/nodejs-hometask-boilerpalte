@@ -24,7 +24,7 @@ export default function NewFighter({ onCreated }) {
     }
 
     const onSubmit = async () => {
-        const data = await createFighter({ name, power });
+        const data = await createFighter({ name, power, defense });
         if(data && !data.error) {
             onCreated(data);
         }
