@@ -57,7 +57,7 @@ ___
     * email - только gmail почты
     * phoneNumber: +380xxxxxxxxx
     * power - число, 1 < power < 100
-    * defense - число, 1 < defense < 100
+    * defense - число, 1 < defense < 10
     * health - число, 80 < health < 120, необязательное поле(по умолчанию - 100)
 
 Все дополнительные валидации приветствуются.  
