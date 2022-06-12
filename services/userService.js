@@ -16,7 +16,7 @@ class UserService {
   }
 
   postUser(req, res) {
-    const { firstname, lastname, email, phoneNumber, password } = req.body;
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
     const findByEmail = UserRepository.getOne({ email });
     const findByNumber = UserRepository.getOne({ phoneNumber });
     if (findByNumber) {
@@ -27,8 +27,8 @@ class UserService {
     }
 
     const newUser = UserRepository.create({
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       phoneNumber,
       password,
