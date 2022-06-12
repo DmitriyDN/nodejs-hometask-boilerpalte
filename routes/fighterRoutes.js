@@ -10,7 +10,7 @@ const router = Router();
 
 router.get("/", FighterService.getFighters);
 router.get("/:id", FighterService.getFighter);
-router.post("/", FighterService.postFighter);
+router.post("/", createFighterValid, FighterService.postFighter);
 router.put("/:id", FighterService.updateFighter);
 router.delete("/:id", FighterService.deleteFighter);
 

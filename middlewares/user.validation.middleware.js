@@ -2,7 +2,7 @@ const { user } = require("../models/user");
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during creation
   const body = req.body;
-  console.log(user);
+
   for (key in user) {
     if (key === "id") continue;
     if (!body.hasOwnProperty(key)) {
