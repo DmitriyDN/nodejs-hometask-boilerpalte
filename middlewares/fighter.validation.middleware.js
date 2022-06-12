@@ -34,7 +34,11 @@ const createFighterValid = (req, res, next) => {
 
 const updateFighterValid = (req, res, next) => {
   // TODO: Implement validatior for fighter entity during update
-  next();
+  const body = req.body;
+  for (key in fighter) {
+    if (body.hasOwnProperty(key)) next();
+  }
+  return res.json({ message: "No one property is not added to update" });
 };
 
 exports.createFighterValid = createFighterValid;
