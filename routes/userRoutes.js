@@ -11,7 +11,7 @@ const router = Router();
 router.get("/", UserService.getUsers);
 router.get("/:id", UserService.getUser);
 router.post("/", createUserValid, UserService.postUser);
-router.put("/:id", UserService.updateUser);
+router.put("/:id", updateUserValid, UserService.updateUser);
 router.delete("/:id", UserService.deleteUser);
 
 // TODO: Implement route controllers for user

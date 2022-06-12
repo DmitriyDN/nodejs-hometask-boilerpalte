@@ -25,8 +25,11 @@ const createUserValid = (req, res, next) => {
 
 const updateUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during update
-
-  next();
+  const body = req.body;
+  for (key in user) {
+    if (body.hasOwnProperty(key)) next();
+  }
+  return res.json({ message: "No one property is not added to update" });
 };
 
 exports.createUserValid = createUserValid;
