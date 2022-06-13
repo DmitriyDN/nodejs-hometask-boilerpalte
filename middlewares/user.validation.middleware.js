@@ -12,7 +12,6 @@ const createUserValid = (req, res, next) => {
     } else {
         res.status(401).send(JSON.stringify(error));
     }
-
 }
 
 const updateUserValid = (req, res, next) => {
@@ -71,7 +70,6 @@ const validUser = (reqBody, modelUser) => {
     
     return error;
 }
-
 
 exports.createUserValid = createUserValid;
 exports.updateUserValid = updateUserValid;
