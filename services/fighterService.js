@@ -1,3 +1,4 @@
+const { ApiError } = require("../middlewares/response.middleware");
 const { FighterRepository } = require("../repositories/fighterRepository");
 
 class FighterService {
@@ -6,21 +7,21 @@ class FighterService {
     const fighters = FighterRepository.getAll();
     return res.json(fighters);
   }
-  getFighter(req, res) {
+  getFighter(req, res, next) {
     const { id } = req.params;
     const fighter = FighterRepository.getOne({ id });
     if (!fighter) {
-      return res.json({ message: "User with id " + id + " not exist" });
+      return next(ApiError.badRequest("User with id " + id + " not exist"));
     }
     return res.json(fighter);
   }
 
-  postFighter(req, res) {
+  postFighter(req, res, next) {
     const { name, health, power, defense } = req.body;
     const findByName = FighterRepository.getOne({ name });
 
     if (findByName) {
-      return res.json({ message: "Fighter with this name is exist" });
+      return next(ApiError.validationError("Fighter with this name is exist"));
     }
 
     const newFighter = FighterRepository.create({
@@ -33,12 +34,14 @@ class FighterService {
     return res.json(newFighter);
   }
 
-  updateFighter(req, res) {
+  updateFighter(req, res, next) {
     const { id } = req.params;
     const data = req.body;
     const fighter = FighterRepository.getOne({ id });
     if (!fighter) {
-      return res.json({ message: "Fighter with this id not exist" });
+      return next(
+        ApiError.validationError("Fighter with this id has already exist")
+      );
     }
     const updatedFighter = FighterRepository.update(id, data);
     return res.json({
@@ -47,11 +50,11 @@ class FighterService {
     });
   }
 
-  deleteFighter(req, res) {
+  deleteFighter(req, res, next) {
     const { id } = req.params;
     const fighter = FighterRepository.getOne({ id });
     if (!fighter) {
-      return res.json({ message: "Fighter with this id not exist" });
+      return next(ApiError.badRequest("Fighter with this id not exist"));
     }
     const deletedFighter = FighterRepository.delete(id);
     return res.json({

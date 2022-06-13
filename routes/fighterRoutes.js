@@ -8,11 +8,21 @@ const {
 
 const router = Router();
 
-router.get("/", FighterService.getFighters);
-router.get("/:id", FighterService.getFighter);
-router.post("/", createFighterValid, FighterService.postFighter);
-router.put("/:id", updateFighterValid, FighterService.updateFighter);
-router.delete("/:id", FighterService.deleteFighter);
+router.get("/", FighterService.getFighters, responseMiddleware);
+router.get("/:id", FighterService.getFighter, responseMiddleware);
+router.post(
+  "/",
+  createFighterValid,
+  FighterService.postFighter,
+  responseMiddleware
+);
+router.put(
+  "/:id",
+  updateFighterValid,
+  FighterService.updateFighter,
+  responseMiddleware
+);
+router.delete("/:id", FighterService.deleteFighter, responseMiddleware);
 
 // TODO: Implement route controllers for fighter
 

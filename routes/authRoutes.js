@@ -4,6 +4,6 @@ const { responseMiddleware } = require("../middlewares/response.middleware");
 
 const router = Router();
 
-router.post("/login", AuthService.login);
+router.post("/login", AuthService.login, responseMiddleware);
 
 module.exports = router;
