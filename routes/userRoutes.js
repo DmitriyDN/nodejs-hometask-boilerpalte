@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
     } else {
         const error = {
             error: true,
-            message:"Users not got, error!"
+            message:"Error!"
         };
         res.status(400).send(JSON.stringify(error));
     }	
@@ -32,7 +32,7 @@ router.get('/:id', function(req, res, next) {
     } else {
         const error = {
             error: true,
-            message:"User not got, error!"
+            message:"User not find, error!"
         };
         res.status(404).send(JSON.stringify(error));
     }
