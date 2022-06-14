@@ -1,0 +1,7 @@
+.fight {
+  display: grid;
+  grid-template-columns: 30% 15% 10% 15% 30%;
+  padding-left: 10px;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}

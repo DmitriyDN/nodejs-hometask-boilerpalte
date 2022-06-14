@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { createFight } from "../../services/domainRequest/fightRequest";
 import "./fightModal.css";
 const FightModal = ({ firstFighter, secondFighter, onClose }) => {
   const [healthPercentageFirst, sethealthPercentageFirst] = useState(100);
   const [healthPercentageSecond, sethealthPercentageSecond] = useState(100);
+  const [fighter1Shot, setFighter1Shot] = useState(0);
+  const [fighter2Shot, setFighter2Shot] = useState(0);
   const [firstFighterBlock, setfirstFighterBlock] = useState(false);
   const [secondFighterBlock, setSecondFighterBlock] = useState(false);
   const [firstFighterTimer, setfirstFighterTimer] = useState(false);
@@ -12,7 +15,17 @@ const FightModal = ({ firstFighter, secondFighter, onClose }) => {
     if (healthPercentageFirst === 0 || healthPercentageSecond === 0) {
       const winner = healthPercentageFirst <= 0 ? secondFighter : firstFighter;
       alert("Winner is = " + winner.name);
-      onClose();
+      createFight({
+        fighter1: firstFighter.id,
+        fighter2: secondFighter.id,
+        fighter1Shot,
+        fighter2Shot,
+        fighter1Health: healthPercentageFirst,
+        fighter2Health: healthPercentageSecond,
+      }).then((res) => {
+        console.log(res);
+        onClose();
+      });
     }
   }, [healthPercentageFirst, healthPercentageSecond]);
 
@@ -28,6 +41,7 @@ const FightModal = ({ firstFighter, secondFighter, onClose }) => {
     switch (e.keyCode) {
       case 65:
         if (!firstFighterBlock) {
+          setFighter1Shot(fighter1Shot + 1);
           if (!secondFighterBlock) {
             damage = getDamage(firstFighter, secondFighter);
             const currentHealthSecond = healthPercentageSecond - damage;
@@ -40,6 +54,7 @@ const FightModal = ({ firstFighter, secondFighter, onClose }) => {
 
       case 74:
         if (!secondFighterBlock) {
+          setFighter2Shot(fighter2Shot + 1);
           if (!firstFighterBlock) {
             damage = getDamage(secondFighter, firstFighter);
             const currentHealthSecond = healthPercentageFirst - damage;
@@ -85,6 +100,7 @@ const FightModal = ({ firstFighter, secondFighter, onClose }) => {
       firstFighterCombo[69] &&
       !firstFighterTimer
     ) {
+      setFighter1Shot(fighter1Shot + 1);
       const currentHealthSecond =
         healthPercentageSecond -
         firstFighter.power * 2 * (secondFighter.health / 100);
@@ -103,6 +119,7 @@ const FightModal = ({ firstFighter, secondFighter, onClose }) => {
       secondFighterCombo[79] &&
       !secondFighterTimer
     ) {
+      setFighter2Shot(fighter2Shot + 1);
       const currentHealthFirst =
         healthPercentageFirst -
         secondFighter.power * 2 * (firstFighter.health / 100);
