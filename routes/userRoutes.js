@@ -10,80 +10,89 @@ const router = Router()
 
 // TODO: Implement route controllers for user
 
-router.get('/', function(req, res, next) {
-    const users = UserService.getAllUsers();
-	if (users) {
-        console.log(users);
-        res.send(users);
-    } else {
-        const error = {
-            error: true,
-            message:"Error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
-
-router.get('/:id', function(req, res, next) {
-    const user = UserService.getOneUser(req.params.id);;
-	if (user) {
-        console.log(user);
-        res.send(user);
-    } else {
-        const error = {
-            error: true,
-            message:"User not find, error!"
-        };
-        res.status(404).send(JSON.stringify(error));
+router.get('/', async (req, res,next) => {
+    try {
+        const users = await UserService.getAllUsers();
+        res.data = users;
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
     }
-}, responseMiddleware)
+}, responseMiddleware);
 
 
-router.post('/', createUserValid, function(req, res) {
-    const user = UserService.create(req.body);
-    if (user) {
-        console.log('router.post:',req.body);
-        res.send("User create successful");
-    } else {
-        const error = {
-            error: true,
-            message:"User not create, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
-
-router.put('/:id', updateUserValid, function(req, res ) {
-    const dataToUpdate = req.body;
-    const user = UserService.update(req.params.id, dataToUpdate);
-    if (user) {
-        console.log('user:', user);
-        res.send("User update successful");
-    } else {
-        const error = {
-            error: true,
-            message:"User not update, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
-
-router.delete('/:id', function(req,res){
-    const user = UserService.delete(req.params.id);
-    if (user) {
-        console.log('user:', user);
-        res.send("User delete successful");
-    } else {
-        const error = {
-            error: true,
-            message:"User not delete, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
+router.get('/:id',  async (req, res, next) => {
+    try {
+        const checkId = await UserService.hasName({id: req.params.id})
+        if(!checkId){
+            res.status(404)
+            throw new Error('User not found')
+        }
+        const user = await UserService.getOneUser({id: req.params.id})
+        if(!user){
+            res.status(404)
+            throw new Error('User not found')
+        }
+        res.data = user
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
+    }
+}, responseMiddleware);
 
 
+router.post('/', createUserValid, async (req, res,next) => {
+    try {
+        req.body.email = req.body.email.toLowerCase()
+        const checkName = await UserService.hasName({email: req.body.email, phoneNumber: req.body.phoneNumber})
+        if (checkName) {
+            res.status(400)
+            throw new Error('User with such an email or phone already exists')
+        }
+        const user = await UserService.create(req.body)
+        res.data = user
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
+    }
+}, responseMiddleware);
 
+router.put('/:id', updateUserValid, async(req, res, next) => {
+    try {
+        const checkId= await UserService.hasName({id: req.params.id})
+        if (!checkId) {
+            res.status(404)
+            throw new Error('User not found')
+        }
+        if (req.body.hasOwnProperty('email')){
+            req.body.email = req.body.email.toLowerCase()
+        }
+        const user = await UserService.update({id: req.params.id, updateData: req.body})
+        res.data = user;
+    } catch (err) {
+        res.err = err;
+    } finally {
+        next();
+    }
+}, responseMiddleware);
 
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const checkId= await UserService.hasName({id: req.params.id})
+        if (!checkId) {
+            res.status(404)
+            throw new Error('User not found')
+        }
+        const user = await UserService.delete(req.params.id)
+        res.data = user
+    } catch (err) {
+        res.err = err;
+    } finally {
+        next();
+    }
+}, responseMiddleware);
 
 module.exports = router

@@ -7,76 +7,87 @@ const router = Router();
 
 // TODO: Implement route controllers for fighter
 
-router.get('/', function(req, res, next) {
-    const fighters = FighterService.getAllFighters();
-    console.log(fighters);
-	if (fighters) {
-        res.send(fighters);
-    } else {
-        const error = {
-            error: true,
-            message:"Error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
+router.get('/', async (req, res, next) => {
+    try {
+        const fighters = await FighterService.getAllFighters();
+        res.data = fighters;
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
+    }
+}, responseMiddleware);
 
-router.get('/:id', function(req, res, next) {
-    const fighter = FighterService.getOneFighter(req.params.id);;
-    console.log(fighter);
 
-	if (fighter) {
-        res.send(fighter);
-    } else {
-        const error = {
-            error: true,
-            message:"Fighter not find, error!"
-        };
-        res.status(404).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
+router.get('/:id', async (req, res, next) => {
+    try {
+        if(!FighterService.hasName({id: req.params.id})){
+            res.status(404)
+            throw new Error('Fighter not found')
+        }
+        const fighter = await FighterService.search({id: req.params.id})
+        res.data = fighter
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
+    }
+}, responseMiddleware);
 
-router.post('/', createFighterValid, function(req, res) {
-    const fighter = FighterService.create(req.body);
-    console.log(fighter);
-    if (fighter) {
-        res.send("Fighter create successful");
-    } else {
-        const error = {
-            error: true,
-            message:"Fighter not create, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
 
-router.put('/:id', updateFighterValid, function(req, res ) {
-    const dataToUpdate = req.body;
-    const fighter = FighterService.update(req.params.id, dataToUpdate);
-    console.log(fighter);
-    if (fighter) {
-        res.send("Fighter update successful");
-    } else {
-        const error = {
-            error: true,
-            message:"Fighter not update, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
+router.post('/', createFighterValid, async (req, res, next) => {
+    try {
+        req.body.name = req.body.name.toUpperCase()
+        const checkFighter = await FighterService.hasName({name: req.body.name})
+        if (checkFighter) {
+            res.status(400)
+            throw new Error('Such a fighter already exists')
+        }
 
-router.delete('/:id', function(req,res){
-    const fighter = FighterService.delete(req.params.id);
-    console.log(fighter);
-    if (fighter) {
-        res.send("Fighter delete successful");
-    } else {
-        const error = {
-            error: true,
-            message:"Fighter not delete, error!"
-        };
-        res.status(400).send(JSON.stringify(error));
-    }	
-}, responseMiddleware)
+        const fighter = await FighterService.create(req.body)
+        res.data = fighter
+    } catch (err) {
+        res.err = err
+    } finally {
+        next()
+    }
+}, responseMiddleware);
+
+
+router.put('/:id', updateFighterValid, async (req, res, next) => {
+    try {
+        if(req.body.hasOwnProperty('name')){
+            req.body.name = req.body.name.toUpperCase()
+        }
+        if(!FighterService.hasName({id: req.params.id})){
+            res.status(404)
+            throw new Error('Fighter not found')
+        }
+
+        const fighter = await FighterService.update({id: req.params.id, updateData: req.body})
+        res.data = fighter;
+    } catch (err) {
+        res.err = err;
+    } finally {
+        next();
+    }
+}, responseMiddleware);
+
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        if(!FighterService.hasName({id: req.params.id})){
+            res.status(404)
+            throw new Error('Fighter not found')
+        }
+
+        const fighter = await FighterService.delete(req.params.id)
+        res.data = fighter
+    } catch (err) {
+        res.err = err;
+    } finally {
+        next();
+    }
+}, responseMiddleware);
 
 module.exports = router;

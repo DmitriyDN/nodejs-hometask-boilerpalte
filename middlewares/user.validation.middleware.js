@@ -1,74 +1,71 @@
 const { user } = require('../models/user');
-
+const validationService = require('../services/validationService')
 
 const createUserValid = (req, res, next) => {
-    // TODO: Implement validatior for user entity during creation
-  
-    const error = validUser({...req.body}, user);
-    const isNotExistEmail = true;
-    error.message += isNotExistEmail ? '' : ' Email already exіsts';
-    if (!error.error && isNotExistEmail) {
-        next()
-    } else {
-        res.status(401).send(JSON.stringify(error));
+    try{
+        if(!req.body){
+            throw new Error('Request body must be is not null')
+        }
+        for(let key in user){
+            if(key !== 'id'){
+                if(!req.body[key]){
+                    throw new Error(`User with such an ${key} exists`)
+                }
+            }
+        }
+        if(Object.keys(user).length - 1 !== Object.keys(req.body).length){
+            throw new Error('User entity to create isn\'t valid')
+        }
+        if (!(validationService.isPhoneNumber(req.body.phoneNumber))) {
+            throw new Error('Phone number format +380XXXXXXXXX')
+        }
+        if (!(validationService.isEmail(req.body.email))) {
+            throw new Error('email must be gmail')
+        }
+        if (!(validationService.isString(req.body.password, 3))){
+            throw new Error('pass is not valid')
+        }
+        if (!(validationService.isString(req.body.firstName))){
+            throw new Error('first name is not valid')
+        }
+        if (!(validationService.isString(req.body.lastName))){
+            throw new Error('last name is not valid')
+        }
+        next();
+    }  catch (err) {
+        res.status(400).json({error: true, message: err.message})
     }
 }
 
 const updateUserValid = (req, res, next) => {
-    // TODO: Implement validatior for user entity during update
-
-    const error = validUser(req.body, user);
-    if (!error.error) {
-        next()
-    } else {
-        res.status(401).send(JSON.stringify(error));
-    }
-}
-
-
-const validUser = (reqBody, modelUser) => {
-    const error = {
-        error: false,
-        message: ''
-    }
-    for ( var prop in reqBody ) {
-        if (modelUser[prop] !== undefined) {
-            switch(prop) {
-                case 'email':
-                    if ( !(/@gmail.com$/.test(reqBody[prop])) ) {
-                        error.error = true;
-                        error.message += ` ${prop} is not valid`;
-                    }
-                    break;
-                case 'firstName':
-                    if (reqBody[prop].length < 1) {
-                        error.error = true;
-                        error.message += ` ${prop}  is not valid`;
-                    }
-                    break;
-                case 'phoneNumber':
-                    if ( !(/\+380\d{9}/.test(reqBody[prop])) ) {
-                        error.error = true;
-                        error.message += ` ${prop}  is not valid`;
-                    }
-                    break;
-                case 'password': 
-                    if (reqBody[prop].length < 3) {
-                        error.error = true;
-                        error.message += ` ${prop}  is not valid`;
-                    }
-                    break;
-                default: 
-                    break;
-            }
-        } else {
-            error.error = true;
-            error.message = 'field dose not in model of User!'
-            return error;
+    try{
+        if(!req.body){
+            throw new Error('Request body must be is not null')
         }
+        for(let key in req.body){
+                if(!user.hasOwnProperty(key)){
+                    throw new Error(`User data to update isn't valid`)
+                }
+        }
+        if (req.body.firstName &&  !(validationService.isString(req.body.firstName))){
+            throw new Error('first name is not valid')
+        }
+        if (req.body.lastName && !(validationService.isString(req.body.lastName))){
+            throw new Error('second name is not valid')
+        }
+        if (req.body.phoneNumber && !(validationService.isPhoneNumber(req.body.phoneNumber))) {
+            throw new Error('Phone number format +380XXXXXXXXX')
+        }
+        if (req.body.email && !(validationService.isEmail(req.body.email))) {
+            throw new Error('email must be gmail')
+        }
+        if (req.body.password && !(validationService.isString(req.body.password, 3))){
+            throw new Error('pass is not valid')
+        }
+        next();
+    } catch(err) {
+        res.status(400).json({error: true, message: err.message})
     }
-    
-    return error;
 }
 
 exports.createUserValid = createUserValid;
