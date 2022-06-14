@@ -1,0 +1,72 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-image: url("../../assets/arena.jpeg");
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 6px;
+  width: 80%;
+  background-color: #fff;
+}
+
+.modal-header {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.fighter-status {
+  width: 20%;
+}
+.fighter-name {
+  color: black;
+  -webkit-text-fill-color: white;
+  -webkit-text-stroke-width: 1px;
+  font-size: 26px;
+  font-family: "Arial Black";
+  font-weight: 700;
+}
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+.health-indicator {
+  width: 100%;
+  height: 25px;
+  border: 2px solid;
+  border-radius: 5px;
+  margin: 0 10px;
+  overflow: hidden;
+}
+.health-bar {
+  width: 100%;
+  height: 100%;
+
+  background-color: #ebd759;
+}
+
+.fighter-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.right-fighter {
+  transform: scaleX(-1);
+}

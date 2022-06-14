@@ -6,12 +6,14 @@ import Fighter from '../fighter';
 import { Button } from '@material-ui/core';
 
 import './fight.css'
+import FightModal from '../fightModal/index.js';
 
 class Fight extends React.Component {
     state = {
         fighters: [],
         fighter1: null,
-        fighter2: null
+        fighter2: null,
+        start:false
     };
 
     async componentDidMount() {
@@ -22,7 +24,10 @@ class Fight extends React.Component {
     }
 
     onFightStart = () => {
-        
+        if(this.state.fighter1 && this.state.fighter2){
+       
+            this.setState({start:true})
+        }
     }
 
     onCreate = (fighter) => {
@@ -67,7 +72,7 @@ class Fight extends React.Component {
                     </div>
                     <Fighter selectedFighter={fighter2} onFighterSelect={this.onFighter2Select} fightersList={this.getFighter2List() || []} />
                 </div>
-            </div>
+                {(this.state.start)?<FightModal firstFighter={fighter1} secondFighter={fighter2} onClose={()=>this.setState({start:false})}/>:null}</div>
         );
     }
 }
