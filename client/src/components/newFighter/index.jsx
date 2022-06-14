@@ -28,14 +28,17 @@ export default function NewFighter({ onCreated }) {
         if(data && !data.error) {
             onCreated(data);
         }
+        setName("")
+        setPower("")
+        setDefense("")
     }
 
     return (
         <div id="new-fighter">
             <div>New Fighter</div>
-            <TextField onChange={onNameChange} id="standard-basic" label="Standard" placeholder="Name"/>
-            <TextField onChange={onPowerChange} id="standard-basic" label="Standard" placeholder="Power" type="number" />
-            <TextField onChange={onDefenseChange} id="standard-basic" label="Standard" placeholder="Defense" type="number" />
+            <TextField value={name} onChange={onNameChange} id="standard-basic" label="Standard" placeholder="Name"/>
+            <TextField value={power} onChange={onPowerChange} id="standard-basic" label="Standard" placeholder="Power" type="number" />
+            <TextField value={defense} onChange={onDefenseChange} id="standard-basic" label="Standard" placeholder="Defense" type="number" />
             <Button onClick={onSubmit} variant="contained" color="primary">Create</Button>
         </div>
     );
