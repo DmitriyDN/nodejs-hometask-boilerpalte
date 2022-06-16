@@ -1,5 +1,7 @@
-import { post } from "../requestHelper"
+import { post } from "../requestHelper";
 
 export const login = async (body) => {
-    return await post('auth/login', body);
-}
+  const data = await post("auth/login", body);
+
+  return data;
+};
